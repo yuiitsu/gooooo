@@ -36,7 +36,7 @@ type jsonResult struct {
 
 func GetRegisterInstance() *register {
 	if registerInstance == nil {
-		registerInstance = &register{}     // not thread safe
+		registerInstance = &register{}
 	}
 	return registerInstance
 }
@@ -55,11 +55,6 @@ func Router(requestType string, path string, c interface{}) {
 	rType := reflect.TypeOf(c)
 	r.Controllers = append(r.Controllers, &controller{
 		requestType, path, rType, rValue})
-
-	for _, value := range r.Controllers {
-		item := value.Path
-		fmt.Println(item)
-	}
 }
 
 func result() {
@@ -72,9 +67,8 @@ func (this App) Write(data interface{}) {
 	result := jsonResult{0, "ok", data}
 	resultJson, err := json.Marshal(result)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
-	fmt.Println(string(resultJson))
 	this.W.Write(resultJson)
 }
 
